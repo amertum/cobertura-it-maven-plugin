@@ -27,6 +27,13 @@ Report Formats
             <format>xml</format>
           </formats>
         </configuration>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>report-only</report>
+            </reports>
+          </reportSet>
+        </reportSets>
       </plugin>
     </plugins>
   </reporting>

@@ -112,9 +112,24 @@ Usage
         </configuration>
         <executions>
           <execution>
+            <id>cobertura-clean</id>
+            <phase>clean</phase>
             <goals>
               <goal>clean</goal>
-              <goal>check</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>cobertura-instrument</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>instrument</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>cobertura-check</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>check-only</goal>
             </goals>
           </execution>
         </executions>

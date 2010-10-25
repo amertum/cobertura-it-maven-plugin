@@ -33,7 +33,7 @@
   </licenses>
   <issueManagement>
     <system>JIRA</system>
-    <url>http://jira.codehaus.org/browse/MCOBERTURA</url>
+    <url>http://code.google.com/p/cobertura-it-maven-plugin/issues/list</url>
   </issueManagement>
   
   <properties>
@@ -42,44 +42,9 @@
   
   <developers>
     <developer>
-      <id>joakime</id>
-      <name>Joakim Erdfelt</name>
-      <email>joakim@erdfelt.net</email>
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-      <timezone>-5</timezone>
-    </developer>
-    <developer>
-      <id>wgwaltney</id>
-      <name>Will Gwaltney</name>
-      <email>will.gwaltney@sas.com</email>
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-    </developer>
-    <developer>
-      <id>fgiust</id>
-      <name>Fabrizio Giustina</name>
-      <email>fgiust@apache.org</email>
-      <roles>
-        <role>Developer</role>
-      </roles>
-    </developer>
-    <developer>
-      <id>aheritier</id>
-      <name>Arnaud Heritier</name>
-      <email>aheritier@apache.org</email>
-      <roles>
-        <role>Developer</role>
-        <role>Despot</role>
-      </roles>
-      <timezone>+1</timezone>
-    </developer>
-    <developer>
-      <id>rfscholte</id>
-      <name>Robert Scholte</name>
-      <email>rfscholte@codehaus.org</email>
+      <id>amertum</id>
+      <name>amertum</name>
+      <email>amertum@gmail.com</email>
       <roles>
         <role>Developer</role>
       </roles>
