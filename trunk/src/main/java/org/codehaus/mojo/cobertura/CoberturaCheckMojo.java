@@ -35,9 +35,18 @@ public class CoberturaCheckMojo
     extends AbstractCoberturaMojo
 {
 
+    /**
+     * Mojo main entry
+     * @throws MojoExecutionException
+     */
     public void execute()
         throws MojoExecutionException
     {
+        if ( skipMojo() )
+        {
+            return;
+        }
+        
         if ( check == null )
         {
             throw new MojoExecutionException( "The Check configuration is missing." );

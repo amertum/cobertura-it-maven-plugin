@@ -55,10 +55,16 @@ public class CoberturaInstrumentMojo
 
     /**
      * build up a command line from the parameters and run Cobertura to instrument the code.
+     * @throws MojoExecutionException
      */
     public void execute()
         throws MojoExecutionException
     {
+        if ( skipMojo() )
+        {
+            return;
+        }
+        
         ArtifactHandler artifactHandler = project.getArtifact().getArtifactHandler();
         if ( !"java".equals( artifactHandler.getLanguage() ) )
         {
@@ -155,6 +161,10 @@ public class CoberturaInstrumentMojo
         }
     }
 
+    /**
+     * We need to tweak our test classpath for cobertura.
+     * @throws MojoExecutionException
+     */
     private void addCoberturaDependenciesToTestClasspath()
         throws MojoExecutionException
     {
@@ -168,7 +178,7 @@ public class CoberturaInstrumentMojo
             throw new MojoExecutionException( "Couldn't find 'cobertura' artifact in plugin dependencies" );
         }
 
-        coberturaArtifact = artifactScopeToTest( coberturaArtifact );
+        coberturaArtifact = artifactScopeToProvided( coberturaArtifact );
 
         if ( this.project.getDependencyArtifacts() != null )
         {
@@ -178,10 +188,16 @@ public class CoberturaInstrumentMojo
         }
     }
 
-    private Artifact artifactScopeToTest( Artifact artifact )
+    /**
+     * Use provided instead of just test, so it's available on both compile and test classpath (MCOBERTURA-26) 
+     * 
+     * @param artifact
+     * @return re-scoped artifact
+     */
+    private Artifact artifactScopeToProvided( Artifact artifact )
     {
         return factory.createArtifact( artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(),
-                                       Artifact.SCOPE_TEST, artifact.getType() );
+                                       Artifact.SCOPE_PROVIDED, artifact.getType() );
     }
 
 }
