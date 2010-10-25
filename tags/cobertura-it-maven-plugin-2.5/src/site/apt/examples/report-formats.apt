@@ -1,0 +1,41 @@
+ ------
+ Report Formats
+ ------
+ Dennis Lundberg
+ ------
+ 2007-07-23
+ ------
+
+
+Report Formats
+
+  The Cobertura plugin can produce reports in <<<html>>> and <<<xml>>> formats.
+  You can even get both is you want to. Here's how you would configure that:
+
++-----+
+<project>
+  ...
+  <reporting>
+    <plugins>
+      ...
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>cobertura-it-maven-plugin</artifactId>
+        <configuration>
+          <formats>
+            <format>html</format>
+            <format>xml</format>
+          </formats>
+        </configuration>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>report-only</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
+</project>
++-----+

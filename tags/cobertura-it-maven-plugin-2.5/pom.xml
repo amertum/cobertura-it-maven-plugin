@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>mojo-parent</artifactId>
+    <groupId>org.codehaus.mojo</groupId>
+    <version>25</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <prerequisites>
+    <maven>2.0.6</maven>
+  </prerequisites>
+  <artifactId>cobertura-it-maven-plugin</artifactId>
+  <packaging>maven-plugin</packaging>
+  <version>2.5</version>
+  <name>Cobertura Integration Test Maven Plugin</name>
+  <url>http://code.google.com/p/cobertura-it-maven-plugin/</url>
+  <inceptionYear>2010</inceptionYear>
+  <description>
+    Cobertura plugin for maven 2. Cobertura is a free Java tool that calculates the percentage of code accessed by
+    tests. It can be used to identify which parts of your Java program are lacking test coverage.
+  </description>
+  <scm>
+    <connection>scm:svn:https://cobertura-it-maven-plugin.googlecode.com/svn/tags/cobertura-it-maven-plugin-2.5</connection>
+    <developerConnection>scm:svn:https://cobertura-it-maven-plugin.googlecode.com/svn/tags/cobertura-it-maven-plugin-2.5</developerConnection>
+    <url>scm:svn:https://cobertura-it-maven-plugin.googlecode.com/svn/tags/cobertura-it-maven-plugin-2.5</url>
+  </scm>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <issueManagement>
+    <system>JIRA</system>
+    <url>http://code.google.com/p/cobertura-it-maven-plugin/issues/list</url>
+  </issueManagement>
+  
+  <properties>
+    <sitePluginVersion>2.0.1</sitePluginVersion>
+  </properties>
+  
+  <developers>
+    <developer>
+      <id>amertum</id>
+      <name>amertum</name>
+      <email>amertum@gmail.com</email>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>+1</timezone>
+    </developer>
+  </developers>
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-changes-plugin</artifactId>
+        <version>2.0-beta-3</version>
+      </plugin>
+    </plugins>
+  </reporting>
+  <dependencies>
+    <!-- cobertura plugin deps -->
+    <dependency>
+      <groupId>net.sourceforge.cobertura</groupId>
+      <artifactId>cobertura</artifactId>
+      <version>1.9.4.1</version>
+    </dependency>
+    <!--
+      runtime has no 3rd party deps.  This allows us to
+      pass this dependency into the project's classpath
+      at runtime without risk of introducing dep version
+      clashes e.g. projects which require an older version of
+      asm (namely Hibernate).
+    -->
+    <dependency>
+      <groupId>net.sourceforge.cobertura</groupId>
+      <artifactId>cobertura-runtime</artifactId>
+      <version>1.9.4.1</version>
+      <type>pom</type>
+    </dependency>
+    <dependency>
+      <groupId>urbanophile</groupId>
+      <artifactId>java-getopt</artifactId>
+      <version>1.0.9</version>
+    </dependency>
+    <!-- maven plugin deps -->
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-artifact</artifactId>
+      <version>2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-api</artifactId>
+      <version>2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.reporting</groupId>
+      <artifactId>maven-reporting-api</artifactId>
+      <version>2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-project</artifactId>
+      <version>2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.reporting</groupId>
+      <artifactId>maven-reporting-impl</artifactId>
+      <version>2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-container-default</artifactId>
+      <version>1.0-alpha-9</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>2.4</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+      <version>2.0.2</version>
+    </dependency>
+    <!-- testing deps -->
+    <dependency>
+      <groupId>httpunit</groupId>
+      <artifactId>httpunit</artifactId>
+      <version>1.6.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.shared</groupId>
+      <artifactId>maven-plugin-testing-harness</artifactId>
+      <version>1.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  
+  <profiles>
+    <profile>
+      <id>run-its</id>
+      <activation>
+        <property>
+          <name>skipTests</name>
+          <value>!true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin> 
+            <groupId>org.apache.maven.plugins</groupId> 
+            <artifactId>maven-release-plugin</artifactId> 
+            <version>2.0</version> 
+            <configuration> 
+              <tagBase>https://cobertura-it-maven-plugin.googlecode.com/svn/tags</tagBase> 
+              <useReleaseProfile>false</useReleaseProfile> 
+              <arguments>-Pmojo-release</arguments> 
+            </configuration> 
+          </plugin> 
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-invoker-plugin</artifactId>
+            <version>1.4</version>
+            <configuration>
+              <debug>true</debug>
+              <projectsDirectory>src/it</projectsDirectory>
+              <pomIncludes>
+                <pomInclude>*/pom.xml</pomInclude>
+              </pomIncludes>
+              <postBuildHookScript>verify</postBuildHookScript>
+              <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
+              <goals>
+                <goal>clean</goal>
+                <goal>verify</goal>
+                <goal>site</goal>
+              </goals>
+              <settingsFile>src/it/settings.xml</settingsFile>
+              <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
+            </configuration>
+            <executions>
+              <execution>
+                <id>integration-test</id>
+                <goals>
+                  <goal>install</goal>
+                  <goal>run</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>  
+    
+    <profile>
+      <id>maven-3</id>
+      <activation>
+        <file>
+          <!-- This employs that the basedir expression is only recognized by Maven 3.x (see MNG-2363) -->
+          <exists>${basedir}</exists>
+        </file>
+      </activation>
+      <properties>
+        <sitePluginVersion>3.0-beta-1-SNAPSHOT</sitePluginVersion>
+      </properties>
+    </profile>    
+    
+  </profiles>
+  
+</project>
