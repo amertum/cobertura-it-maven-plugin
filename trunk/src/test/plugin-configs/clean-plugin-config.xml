@@ -18,7 +18,7 @@
   <build>
     <plugins>
       <plugin>
-        <artifactId>cobertura-maven-plugin</artifactId>
+        <artifactId>cobertura-it-maven-plugin</artifactId>
         <configuration>
           <project implementation="org.codehaus.mojo.cobertura.stubs.CleanMavenProjectStub"/>
           <dataFile>${basedir}/target/test-harness/clean/cobertura.ser</dataFile>
