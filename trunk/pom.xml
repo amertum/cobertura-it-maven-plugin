@@ -205,6 +205,7 @@
               <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
               <goals>
                 <goal>clean</goal>
+                <goal>verify</goal>
                 <goal>site</goal>
               </goals>
               <settingsFile>src/it/settings.xml</settingsFile>
