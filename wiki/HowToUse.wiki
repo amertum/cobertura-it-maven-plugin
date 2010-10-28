@@ -160,6 +160,7 @@ So the trick to do it, is to ignore the dependencies during WAR packaging and un
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>cobertura-it-maven-plugin</artifactId>
+                <version>2.5</version>
                 <configuration>
                     <formats>
                         <format>xml</format>
@@ -208,6 +209,7 @@ So the trick to do it, is to ignore the dependencies during WAR packaging and un
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>cobertura-it-maven-plugin</artifactId>
+                <version>2.5</version>
                 <configuration>
                     <formats>
                         <format>html</format>
