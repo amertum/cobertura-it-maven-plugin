@@ -1,11 +1,9 @@
-#summary maven plugin repository configuration
-#labels maven,plugin,repository
+#summary How to use
+#labels Phase-Deploy,Featured
 
-=== Repository URLs ===
+<wiki:toc max_depth="2" />
 
-  * release : http://cobertura-it-maven-plugin.googlecode.com/svn/maven2/releases
-
-=== POM plugin repository configuration ===
+= Add pluginsRepositories configuration to your POM =
 
 {{{
 <pluginRepositories>
@@ -20,4 +18,211 @@
         </releases>
     </pluginRepository>
 </pluginRepositories>
+}}}
+
+== Repository URLs ==
+
+  * release : http://cobertura-it-maven-plugin.googlecode.com/svn/maven2/releases
+
+= Add plugin configuration to your POM =
+
+This plugin provides two more goals :
+
+  * check-only : check cobertura coverage *without* invoking the execution of the lifecycle phase test prior to executing itself.
+  * report-only : report cobertura coverage *without* invoking the execution of the lifecycle phase test prior to executing itself.
+
+== Integration tests coverage for a single module JAR/WAR ==
+
+This is the simplest usage of this plugin. It allows running cobertura:check-only during the maven verify phase.
+
+See HowToDoIntegrationTestWithMaven
+
+See HowToDoWarIntegrationTestWithMaven
+
+Run it with : `mvn clean verify site -Pit-coverage`
+
+{{{
+<profile>
+    <id>it-coverage</id>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-it-maven-plugin</artifactId>
+                <version>2.5</version>
+                <configuration>
+                    <formats>
+                        <format>xml</format>
+                    </formats> 
+                    <check>
+                        <haltOnFailure>false</haltOnFailure>
+                    </check>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>cobertura-clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>cobertura-instrument</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>instrument</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>cobertura-check-only</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check-only</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-it-maven-plugin</artifactId>
+                <configuration>
+                    <formats>
+                        <format>html</format>
+                        <format>xml</format>
+                    </formats>
+                </configuration>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>report-only</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
+</profile>
+}}}
+
+== Fonctional tests coverage for a multi-module WAR application ==
+
+To enabled coverage for a WAR application within a multi-module project where you want the  coverage of the dependencies modules, the instrumented classes should be packaged within the WAR and the dependencies as well.
+So the trick to do it, is to ignore the dependencies during WAR packaging and unpack the dependencies sources within the WAR so they will be instrumented. Then the WAR should be deploy (using lightweight container such as Jetty) and tests run.
+
+{{{
+<profile>
+    <id>it-coverage</id>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-dependencies-src</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>sources</classifier>
+                            <includeGroupIds>com.example</includeGroupIds>
+                             <outputDirectory>${project.build.directory}/generated-sources/it-dependencies</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>add-it-dep-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.build.directory}/generated-sources/it-dependencies</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-it-maven-plugin</artifactId>
+                <configuration>
+                    <formats>
+                        <format>xml</format>
+                    </formats> 
+                    <check>
+                        <haltOnFailure>false</haltOnFailure>
+                    </check>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>cobertura-clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>cobertura-instrument</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>instrument</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>cobertura-check-only</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check-only</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <archiveClasses>false</archiveClasses>
+                    <packagingExcludes>WEB-INF/lib/example-*.jar</packagingExcludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-it-maven-plugin</artifactId>
+                <configuration>
+                    <formats>
+                        <format>html</format>
+                        <format>xml</format>
+                    </formats>
+                </configuration>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>report-only</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
+</profile>
 }}}
