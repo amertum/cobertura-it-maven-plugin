@@ -3,6 +3,10 @@
 
 <wiki:toc max_depth="2" />
 
+= Required =
+
+See [http://maven.apache.org/plugins/maven-failsafe-plugin/usage.html How to do integration test with maven-failsafe-plugin]
+
 = Add pluginsRepositories configuration to your POM =
 
 {{{
@@ -34,10 +38,6 @@ This plugin provides two more goals :
 == Integration tests coverage for a single module JAR/WAR ==
 
 This is the simplest usage of this plugin. It allows running cobertura:check-only during the maven verify phase.
-
-See HowToDoIntegrationTestWithMaven
-
-See HowToDoWarIntegrationTestWithMaven
 
 Run it with : `mvn clean verify site -Pit-coverage`
 
